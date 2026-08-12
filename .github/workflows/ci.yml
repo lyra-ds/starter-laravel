@@ -45,9 +45,6 @@ jobs:
       - name: Check code style
         run: vendor/bin/pint --test
 
-      - name: Run tests
-        run: vendor/bin/pest
-
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -59,3 +56,9 @@ jobs:
 
       - name: Build assets
         run: npm run build
+
+      # Tests run last: some Feature tests render views that go through
+      # @vite() (see resources/views/layouts/app.blade.php), which needs
+      # public/build/manifest.json to already exist.
+      - name: Run tests
+        run: vendor/bin/pest
