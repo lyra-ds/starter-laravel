@@ -56,21 +56,21 @@ baseline look: it removes `data-brand` entirely — never set the attribute
 without defining `--brand`, or the derived accent group resolves to
 nothing.
 
-## Autenticação (opcional)
+## Authentication (optional)
 
-Este template **não instala o Fortify** — ele só entrega as sete views de
-autenticação em `resources/views/auth/`, já estilizadas com os componentes
-Lyra, prontas para você ligar quando precisar de autenticação de verdade.
+This template does **not install Fortify** — it only ships the seven
+authentication views in `resources/views/auth/`, already styled with the
+Lyra components, ready to wire up when you need real authentication.
 
-Para ativar:
+To enable it:
 
 ```sh
 composer require laravel/fortify
 php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
 ```
 
-E aponte o Fortify para as views já prontas, em
-`app/Providers/FortifyServiceProvider.php` (método `boot`):
+Then point Fortify at the ready-made views, in
+`app/Providers/FortifyServiceProvider.php` (`boot` method):
 
 ```php
 Fortify::loginView(fn () => view('auth.login'));
@@ -82,13 +82,14 @@ Fortify::confirmPasswordView(fn () => view('auth.confirm-password'));
 Fortify::twoFactorChallengeView(fn () => view('auth.two-factor-challenge'));
 ```
 
-## Por que não há Tailwind
+## Why there is no Tailwind
 
-O Lyra é CSS-first: os componentes já vêm estilizados por
-`@lyra-ds/styles`, sem depender de um framework de utilitários. O mesmo CSS
-serve React, HTML puro e Blade — é o que o template demonstra. Adicionar
-Tailwind aqui contradiria esse ponto. Quem quiser Tailwind no seu app pode
-instalá-lo; ele não é proibido, só está ausente no ponto de partida.
+Lyra is CSS-first: the components ship already styled by `@lyra-ds/styles`,
+with no dependency on a utility framework. The same CSS serves React, plain
+HTML, and Blade — which is exactly what this template demonstrates. Adding
+Tailwind here would contradict that point. If you want Tailwind in your
+app, you can install it; it is not forbidden, just absent from the starting
+point.
 
 ## Scripts
 

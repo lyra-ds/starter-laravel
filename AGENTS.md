@@ -40,7 +40,7 @@ Laravel template for [Lyra Design System](https://lyra-ds.dev).
   from the brand tokens. The baseline Lyra look means no `data-brand`
   attribute at all — never set it without defining `--brand`.
 - Fortify is **not installed**. `resources/views/auth/*` are ready-made
-  views for when a project needs it — see the README's "Autenticação
-  (opcional)" section for the exact `Fortify::*View()` wiring.
+  views for when a project needs it — see the README's "Authentication
+  (optional)" section for the exact `Fortify::*View()` wiring.
 - Fonts (`@fontsource/plus-jakarta-sans`, `@fontsource/jetbrains-mono`) are
   local dependencies served by Vite — never load fonts from a CDN.
