@@ -1,58 +1,120 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Lyra DS Laravel template
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A minimal [Laravel](https://laravel.com) template for
+[Lyra Design System](https://lyra-ds.dev). It ships the public Lyra Blade
+components and styles, local fonts, theme selection (light / dark / system),
+live white-label branding, ready-to-go Fortify-compatible auth views, and a
+Pint + Pest + npm CI setup.
 
-## About Laravel
+[See the live demo →](https://github.com/lyra-ds/starter-laravel-demo)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Create your project
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Click **Use this template** on GitHub, or clone directly:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```sh
+git clone https://github.com/lyra-ds/starter-laravel.git my-app
+cd my-app
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Then:
 
-## Contributing
+```sh
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+npm run build
+php artisan serve
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## After cloning
 
-## Code of Conduct
+- [ ] Rename `name` in `composer.json`.
+- [ ] Set `APP_NAME` in `.env`.
+- [ ] Replace the example brands in `resources/css/app.css` with your own.
+- [ ] When you start building, delete the `welcome.blade.php` demo content
+      and replace it with your app's first page.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## White-label branding
 
-## Security Vulnerabilities
+Lyra rebrands with only four CSS variables — everything else derives from
+them:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```css
+[data-brand='acme'] {
+  --brand: #176b87;
+  --brand-contrast: #ffffff;
+  --brand-radius: 0.75rem;
+  --brand-font: 'Plus Jakarta Sans', sans-serif;
+}
+```
 
-## License
+See `resources/css/app.css` for the example brands (`citrus`, `ocean`,
+`grape`) the welcome page switches between. The "Lyra" option is the
+baseline look: it removes `data-brand` entirely — never set the attribute
+without defining `--brand`, or the derived accent group resolves to
+nothing.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Autenticação (opcional)
+
+Este template **não instala o Fortify** — ele só entrega as sete views de
+autenticação em `resources/views/auth/`, já estilizadas com os componentes
+Lyra, prontas para você ligar quando precisar de autenticação de verdade.
+
+Para ativar:
+
+```sh
+composer require laravel/fortify
+php artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"
+```
+
+E aponte o Fortify para as views já prontas, em
+`app/Providers/FortifyServiceProvider.php` (método `boot`):
+
+```php
+Fortify::loginView(fn () => view('auth.login'));
+Fortify::registerView(fn () => view('auth.register'));
+Fortify::requestPasswordResetLinkView(fn () => view('auth.forgot-password'));
+Fortify::resetPasswordView(fn (Request $request) => view('auth.reset-password', ['request' => $request]));
+Fortify::verifyEmailView(fn () => view('auth.verify-email'));
+Fortify::confirmPasswordView(fn () => view('auth.confirm-password'));
+Fortify::twoFactorChallengeView(fn () => view('auth.two-factor-challenge'));
+```
+
+## Por que não há Tailwind
+
+O Lyra é CSS-first: os componentes já vêm estilizados por
+`@lyra-ds/styles`, sem depender de um framework de utilitários. O mesmo CSS
+serve React, HTML puro e Blade — é o que o template demonstra. Adicionar
+Tailwind aqui contradiria esse ponto. Quem quiser Tailwind no seu app pode
+instalá-lo; ele não é proibido, só está ausente no ponto de partida.
+
+## Scripts
+
+| Command                | What it does                    |
+| ----------------------- | -------------------------------- |
+| `php artisan serve`    | Start the dev server             |
+| `npm run dev`          | Vite dev server (assets)         |
+| `npm run build`        | Production asset build           |
+| `vendor/bin/pest`      | Run tests                        |
+| `vendor/bin/pint`      | Fix code style                   |
+| `vendor/bin/pint --test` | Check code style (used in CI) |
+
+CI runs Pint, Pest, and the asset build on every push and PR, on PHP 8.3
+and 8.4.
+
+## AI agents
+
+The template ships an [`AGENTS.md`](./AGENTS.md) that points AI coding
+agents at the Lyra DS docs, the machine-readable component contracts
+([llms.txt](https://lyra-ds.dev/llms.txt)), and this project's commands and
+conventions. Keep it updated as your project evolves.
+
+## Links
+
+- [Lyra DS](https://lyra-ds.dev)
+- [Lyra repository](https://github.com/lyra-ds/lyra)
+- [lyra-ds/blade on Packagist](https://packagist.org/packages/lyra-ds/blade)
+- [@lyra-ds/styles on npm](https://www.npmjs.com/package/@lyra-ds/styles)
+- [@lyra-ds/alpine on npm](https://www.npmjs.com/package/@lyra-ds/alpine)
