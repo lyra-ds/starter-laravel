@@ -28,6 +28,32 @@ npm run build
 php artisan serve
 ```
 
+## Lyra versions and migration
+
+The qualified package combination is `lyra-ds/blade` 1.0.0,
+`@lyra-ds/alpine` 2.0.0, and `@lyra-ds/styles` 1.2.0. Blade's Composer
+requirement and public templates/API are unchanged. The Lyra Alpine plugin
+still supports Alpine.js `>=3.13 <4`; Alpine.js itself is unchanged.
+
+Lyra Alpine 2.0.0 changes the default toast policy: info/success toasts
+expire after 8000 ms, while danger/error toasts remain until dismissed.
+Pointer hover and keyboard focus independently pause the remaining time.
+An explicit per-toast duration overrides global configuration, including
+`duration: 0` for persistence.
+
+To retain the previous 4000 ms default for all tones, add this after
+`Alpine.plugin(lyra)` and before `Alpine.start()` in your application:
+
+```js
+Alpine.store('lyraToasts').duration = 4000;
+```
+
+Global configuration changes apply only to newly queued messages; explicit
+per-toast durations still take precedence. This starter adopts the new
+defaults without adding this override. To roll back, revert the atomic
+consumer-adoption commit, restoring both prior npm ranges and the prior
+lockfile. No data or schema migration is needed.
+
 ## After cloning
 
 - [ ] Rename `name` in `composer.json`.
